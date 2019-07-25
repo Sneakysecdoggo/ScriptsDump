@@ -1,0 +1,4 @@
+#Identifiy all last logon for user from last logon attribut on each domain controler
+$outputFile= "C:\AD_Export.csv"
+Import-Module ActiveDirectory
+Get-ADDomainController -filter * | % {Get-ADUser -Filter "Enabled -eq 'True'  " -server $_.name -Properties  Name,SamAccountName,Description,EmployeeID,EmployeeNumber,EmailAddress,LastLogon,Title,Department,Organization,Enabled -SearchBase "DC=DOMAIN,DC=NAME,DC=MIAOU,DC=WAF" | Select Name,SamAccountName,Description,EmployeeID,EmployeeNumber,EmailAddress,@{N='Last‌​Logon'; E={[DateTime]::FromFileTime($_.LastLogon)}},Manager,Title,Department,Organizatio‌​n,Enabled}| Group samaccountname | ForEach{$_.Group | Sort LastLogon -Descending | Select -First 1} | Export-Csv $outputFile -NoTypeInformation	

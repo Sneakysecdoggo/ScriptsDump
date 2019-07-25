@@ -1,0 +1,2 @@
+#Registry key to add in order to disable ad validation of dhcp server
+New-ItemProperty HKLM:\SYSTEM\CurrentControlSet\Services\DHCPServer\Parameters  -Name DisableRogueDetection -PropertyType  Dword -Value 1
